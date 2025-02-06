@@ -7,12 +7,12 @@ async function menuHandler(req, res) {
 //sync plugin, note usage of next in this synchronous plugin
 export default function recipesPlugin(app, opts, next) {
 	// authentication using a hook
-	app.addHook('onRequest', async function isChef(req, res) {
-		if (req.headers['x-api-key'] !== 'fastify-rocks') {
-			res.code(401);
-			throw new Error('Invalid API key!');
-		}
-	});
+	// app.addHook('onRequest', async function isChef(req, res) {
+	// 	if (req.headers['x-api-key'] !== 'fastify-rocks') {
+	// 		res.code(401);
+	// 		throw new Error('Invalid API key!');
+	// 	}
+	// });
 
 	// with asynchronous handlers
 	app.route({ method: 'GET', url: '/menu', handler: menuHandler });

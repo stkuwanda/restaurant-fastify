@@ -6,5 +6,5 @@ export default async function ordersPlugin(app, opts) {
 
 	app.get('/orders', { handler: notImplemented });
 	app.post('/orders', { handler: notImplemented });
-	app.patch('/orders:id', { handler: notImplemented });
+	app.patch('/orders/:id', { handler: notImplemented, onRequest: app.authOnlyChef });
 }
