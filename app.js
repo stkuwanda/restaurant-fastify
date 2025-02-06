@@ -1,4 +1,5 @@
 import recipesPlugin from './routes/recipes.js';
+import ordersPlugin from './routes/orders.js';
 
 const serverConfigOptions = { logger: true };
 
@@ -9,6 +10,7 @@ export default async function appPlugin(app, options) {
 	});
 
   app.register(recipesPlugin);
+  app.register(ordersPlugin);
 }
 
 export { serverConfigOptions as options };
