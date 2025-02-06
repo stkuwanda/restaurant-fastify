@@ -6,6 +6,14 @@ async function menuHandler(req, res) {
 
 //sync plugin, note usage of next in this synchronous plugin
 export default function recipesPlugin(app, opts, next) {
+	// authentication using a hook
+	app.addHook('onRequest', async function isChef(req, res) {
+		if (req.headers['x-api-key'] !== 'fastify-rocks') {
+			res.code(401);
+			throw new Error('Invalid API key!');
+		}
+	});
+
 	// with asynchronous handlers
 	app.route({ method: 'GET', url: '/menu', handler: menuHandler });
 	app.get('/recipes', { handler: menuHandler });
@@ -15,8 +23,8 @@ export default function recipesPlugin(app, opts, next) {
 
 	// with synchronous handlers
 	app.delete('/recipes/:id', function removeFromMenu(req, res) {
-    res.send(new Error('Not implemented!')); // note the imperative use of the res.send(new Error()) method for the synchronous handler
-  });
+		res.send(new Error('Not implemented!')); // note the imperative use of the res.send(new Error()) method for the synchronous handler
+	});
 
 	next();
 }
