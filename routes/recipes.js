@@ -14,7 +14,7 @@ export default function recipesPlugin(app, opts, next) {
 	});
 
 	// with synchronous handlers
-	app.delete('/recipes:id', function removeFromMenu(req, res) {
+	app.delete('/recipes/:id', function removeFromMenu(req, res) {
     res.send(new Error('Not implemented!')); // note the imperative use of the res.send(new Error()) method for the synchronous handler
   });
 
