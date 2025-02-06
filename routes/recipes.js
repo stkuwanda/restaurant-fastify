@@ -6,5 +6,6 @@ function menuHandler(req, res) {
 
 export default function recipesPlugin(app, opts, next) {
 	app.route({ method: 'GET', url: '/menu', handler: menuHandler });
+	app.get('/recipes', { handler: menuHandler });
 	next();
 }
