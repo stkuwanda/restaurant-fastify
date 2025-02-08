@@ -1,10 +1,10 @@
-import { fastify } from 'fastify';
+import Fastify from 'fastify';
 import appPlugin, { options } from './app.js';
 
 const port = process.env.PORT || 3000;
 
 // create the root application instance that identifies the Fastify API
-const app = fastify(options);
+const app = Fastify(options);
 
 // registering a plugin
 app.register(appPlugin);
