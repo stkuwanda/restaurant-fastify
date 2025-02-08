@@ -6,9 +6,6 @@ const port = process.env.PORT || 3000;
 // create the root application instance that identifies the Fastify API
 const app = Fastify(options);
 
-// registering a plugin
-app.register(appPlugin);
-
 // application life-cycle hooks
 // onReadey: Emitted when application is loaded by server and server is not yet listening
 // for requests
@@ -23,6 +20,9 @@ app.addHook('onClose', function hook(app, done) {
 	app.log.info(`onClose runs from file ${import.meta.url}`);
 	done();
 });
+
+// registering a plugin
+app.register(appPlugin);
 
 try {
 	// host config property configures server to accept connections from any IPv4 address.
