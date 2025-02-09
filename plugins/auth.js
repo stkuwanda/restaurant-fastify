@@ -11,7 +11,13 @@ async function authPlugin(app, opts) {
 			throw new Error('Invalid API key');
 		}
 	});
-  
+
+  // use the onRoute hook to guard every route with its route options config object whose auth prop is set to true
+	app.addHook('onRoute', function hook(routeOptions) {
+		if (routeOptions.config?.auth === true) {
+			routeOptions.onRequest = [app.authOnlyChef].concat(routeOptions.onResponse || []);
+		}
+	});
 }
 
 export default fp(authPlugin);
