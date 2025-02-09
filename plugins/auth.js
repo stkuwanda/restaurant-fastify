@@ -1,6 +1,6 @@
-import appPlugin from "../app.js";
+import fp from 'fastify-plugin';
 
-export default async function authPlugin(app, opts) {
+async function authPlugin(app, opts) {
 	app.decorateRequest('isChef', function isChef() {
 		return this.headers['x-api-key'] === 'fastify-rocks';
 	});
@@ -11,6 +11,7 @@ export default async function authPlugin(app, opts) {
 			throw new Error('Invalid API key');
 		}
 	});
-
-  app.register(appPlugin);
+  
 }
+
+export default fp(authPlugin);
