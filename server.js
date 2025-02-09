@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
-import appPlugin, { options } from './app.js';
+import { options } from './app.js';
+import authPlugin from './plugins/auth.js';
 
 const port = process.env.PORT || 3000;
 
@@ -22,7 +23,7 @@ app.addHook('onClose', function hook(app, done) {
 });
 
 // registering a plugin
-app.register(appPlugin);
+app.register(authPlugin);
 
 try {
 	// host config property configures server to accept connections from any IPv4 address.
