@@ -1,6 +1,7 @@
 import recipesPlugin from './routes/recipes.js';
 import ordersPlugin from './routes/orders.js';
 import authPlugin from './plugins/auth.js';
+import dataSourcePlugin from './plugins/datasource.js';
 
 const serverConfigOptions = { logger: true };
 
@@ -10,6 +11,7 @@ export default async function appPlugin(app, options) {
 		return { api: 'restaurant-api', version: '0.1.0' };
 	});
 
+	app.register(dataSourcePlugin);
 	app.register(authPlugin);
 	app.register(recipesPlugin);
 	app.register(ordersPlugin);
