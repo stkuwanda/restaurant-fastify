@@ -15,7 +15,20 @@ export default function recipesPlugin(app, opts, next) {
 	app.post('/recipes', {
 		config: { auth: true },
 		handler: async function addToMenu(req, res) {
-			throw new Error('Not implemented!'); // note the direct throw of Errors in the async handlers
+			const { name, country, description, order, price } = req.body;
+			const { insertRecipe } = app.dataSource;
+
+			const newDishId = await insertRecipe({
+				name,
+				country,
+				description,
+				order,
+				price,
+				createdAt: new Date(),
+			});
+			
+			res.code(201);
+			return { id: newDishId };
 		},
 	});
 
