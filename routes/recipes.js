@@ -1,7 +1,6 @@
 async function menuHandler(req, res) {
-	this.log.info('Logging GET /menu from this');
-	req.log.info('Logging GET /menu from req (request object)');
-	throw new Error('Not implemented!');
+	const recipes = await this.dataSource.readRecipes();
+	return recipes;
 }
 
 //sync plugin, note usage of next in this synchronous plugin

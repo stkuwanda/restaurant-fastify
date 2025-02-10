@@ -17,10 +17,21 @@ async function dataSourcePlugin(app, opts) {
 				return result.insertedId;
 			} catch (error) {
 				app.log.error(error);
-        throw error;
+				throw error;
 			}
 		},
-		readRecipes: async function (filters, sort) {},
+		readRecipes: async function (filters, sort = { order: 1 }) {
+			const { db } = app.mongo;
+			const menuCollection = db.collection('menu');
+
+			try {
+				const result = await menuCollection.find(filters).sort(sort).toArray();
+				return result;
+			} catch (error) {
+				app.log.error(error);
+				throw error;
+			}
+		},
 		deleteRecipe: async function (recipeId) {},
 		insertOrder: async function (order) {},
 		readOrders: async function (filters, sort) {},
