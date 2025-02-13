@@ -11,8 +11,21 @@ export default function recipesPlugin(app, opts, next) {
 
 	// protected routes
 	// with async handler
+	const jsonSchemaBody = {
+		type: 'object',
+		required: ['name', 'country', 'order', 'price'],
+		properties: {
+			name: { type: 'string', minLength: 3, maxLength: 50 },
+			country: { type: 'string', enum: ['ITA', 'IND', 'ZW'] },
+			description: { type: 'string', minLength: 7, maxLength: 7000 },
+			order: { type: 'number', minimum: 0, maximum: 100 },
+			price: { type: 'number', minimum: 0, maximum: 70 },
+		},
+	};
+
 	app.post('/recipes', {
 		config: { auth: true },
+		schema: { body: jsonSchemaBody },
 		handler: async function addToMenu(req, res) {
 			const { name, country, description, order, price } = req.body;
 			const { insertRecipe } = app.dataSource;
@@ -25,7 +38,7 @@ export default function recipesPlugin(app, opts, next) {
 				price,
 				createdAt: new Date(),
 			});
-			
+
 			res.code(201);
 			return { id: newDishId };
 		},
