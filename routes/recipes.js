@@ -9,8 +9,7 @@ export default function recipesPlugin(app, opts, next) {
 	app.route({ method: 'GET', url: '/menu', handler: menuHandler });
 	app.get('/recipes', { handler: menuHandler });
 
-	// protected routes
-	// with async handler
+	// request validation schemas
 	const jsonSchemaBody = {
 		type: 'object',
 		required: ['name', 'country', 'order', 'price'],
@@ -23,9 +22,19 @@ export default function recipesPlugin(app, opts, next) {
 		},
 	};
 
+	const jsonSchemaHeaders = {
+		type: 'object',
+		required: ['x-api-key'],
+		properties: {
+			'x-api-key': { type: 'string', minLength: 3, maxLength: 50 },
+		},
+	};
+
+	// protected routes
+	// with async handler
 	app.post('/recipes', {
 		config: { auth: true },
-		schema: { body: jsonSchemaBody },
+		schema: { body: jsonSchemaBody, headers: jsonSchemaHeaders },
 		handler: async function addToMenu(req, res) {
 			const { name, country, description, order, price } = req.body;
 			const { insertRecipe } = app.dataSource;
@@ -47,6 +56,7 @@ export default function recipesPlugin(app, opts, next) {
 	// with synchronous handler
 	app.delete('/recipes/:id', {
 		config: { auth: true },
+		schema: { headers: jsonSchemaHeaders },
 		handler: function removeFromMenu(req, res) {
 			res.send(new Error('Not implemented!')); // note the imperative use of the res.send(new Error()) method for the synchronous handler
 		},
