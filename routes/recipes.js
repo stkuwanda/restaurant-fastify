@@ -30,6 +30,14 @@ export default function recipesPlugin(app, opts, next) {
 		},
 	};
 
+	const jsonSchemaParams = {
+		type: 'object',
+		required: ['id'],
+		properties: {
+			id: { type: 'string', minLength: 24, maxLength: 24 },
+		},
+	};
+
 	// protected routes
 	// with async handler
 	app.post('/recipes', {
@@ -56,9 +64,33 @@ export default function recipesPlugin(app, opts, next) {
 	// with synchronous handler
 	app.delete('/recipes/:id', {
 		config: { auth: true },
-		schema: { headers: jsonSchemaHeaders },
+		schema: { headers: jsonSchemaHeaders, params: jsonSchemaParams },
 		handler: function removeFromMenu(req, res) {
-			res.send(new Error('Not implemented!')); // note the imperative use of the res.send(new Error()) method for the synchronous handler
+			const { id } = req.params;
+			const { deleteRecipe, readRecipes } = app.dataSource;
+
+			// note the promises are using the more verbose then-catch approach as context of handler is synchronous
+			readRecipes({ id })
+				.then((result) => {
+					const [recipe] = result;
+
+					if (recipe) {
+						deleteRecipe(id)
+							.then((count) => {
+								res.code(204); // note nothing will be sent after status code 204
+								// res.send({ operation: 'deletion', result: 'success', count }); // this will not run since status code is 204
+							})
+							.catch((error) => {
+								throw error;
+							});
+					} else {
+						res.code(404);
+						throw new Error('Not found!');
+					}
+				})
+				.catch((error) => {
+					res.send(error); // note the imperative use of the res.send(new Error()) method for the synchronous handler
+				});
 		},
 	});
 

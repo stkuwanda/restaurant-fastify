@@ -32,7 +32,21 @@ async function dataSourcePlugin(app, opts) {
 				throw error;
 			}
 		},
-		deleteRecipe: async function (recipeId) {},
+		deleteRecipe: async function (recipeId) {
+			const { db, ObjectId } = app.mongo;
+			const menuCollection = db.collection('menu');
+
+			try {
+				const result = await menuCollection.deleteOne({
+					_id: new ObjectId(recipeId),
+				});
+				
+				return result.deletedCount;
+			} catch (error) {
+				app.log.error(error);
+				throw error;
+			}
+		},
 		insertOrder: async function (order) {},
 		readOrders: async function (filters, sort) {},
 		markOrderAsDone: async function (orderId) {},
