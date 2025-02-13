@@ -3,11 +3,14 @@ import ordersPlugin from './routes/orders.js';
 import authPlugin from './plugins/auth.js';
 import dataSourcePlugin from './plugins/datasource.js';
 
-// setup fastify logger, and ajv request/response validation 
-// module output to list all errors instead of the first hit error
+// setup fastify logger.
+// setup ajv request/response validation module to output to list 
+// all errors instead of the first hit error.
+// setup ajav req/res validator to drop all non-schema properties
+// 
 const serverConfigOptions = {
 	logger: true,
-	ajv: { customOptions: { allErrors: true } },
+	ajv: { customOptions: { allErrors: true, removeAdditional: 'all' } },
 };
 
 // asynchronous version
