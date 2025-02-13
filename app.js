@@ -3,7 +3,12 @@ import ordersPlugin from './routes/orders.js';
 import authPlugin from './plugins/auth.js';
 import dataSourcePlugin from './plugins/datasource.js';
 
-const serverConfigOptions = { logger: true };
+// setup fastify logger, and ajv request/response validation 
+// module output to list all errors instead of the first hit error
+const serverConfigOptions = {
+	logger: true,
+	ajv: { customOptions: { allErrors: true } },
+};
 
 // asynchronous version
 export default async function appPlugin(app, options) {
